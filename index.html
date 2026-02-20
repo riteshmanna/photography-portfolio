@@ -149,7 +149,14 @@
             <div class="bg-[#161b22] rounded-3xl p-4 card-hover reveal">
                 <img src="./images/sports/football7.jpg" alt="Sports Cover" class="w-full h-72 object-cover rounded-2xl mb-6">
                 <button onclick="toggleSportsMenu(true)" class="w-full bg-[#2dd4bf] text-[#0d1117] py-4 rounded-xl font-black uppercase tracking-widest hover:brightness-110 transition active:scale-95">
-                    View Sports
+                    View Football
+                </button>
+            </div>
+
+            <div class="bg-[#161b22] rounded-3xl p-4 card-hover reveal">
+                <img src="./images/cricket/cricket (2).jpg" alt="Cricket Cover" class="w-full h-72 object-cover rounded-2xl mb-6">
+                <button onclick="openGallery('cricket-modal')" class="w-full bg-[#2dd4bf] text-[#0d1117] py-4 rounded-xl font-black uppercase tracking-widest hover:brightness-110 transition active:scale-95">
+                    View Cricket
                 </button>
             </div>
 
@@ -267,6 +274,28 @@
         </div>
     </div>
 
+<div id="cricket-modal" class="gallery-modal">
+        <span class="close-modal" onclick="closeGallery('cricket-modal')">&times;</span>
+        <div class="modal-content-wrapper">
+            <img src="./images/cricket/cricket (2).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (3).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (1).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (4).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (5).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (9).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (15).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (16).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (14).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (13).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (17).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (18).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (10).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (8).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (7).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (11).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (6).jpg" loading="lazy"class="modal-img">
+        </div>
+    </div>
     <div id="concert-modal" class="gallery-modal">
         <span class="close-modal" onclick="closeGallery('concert-modal')">&times;</span>
         <div class="modal-content-wrapper">
@@ -285,7 +314,7 @@
             <img src="./images/contest/_DSC0460.jpg" loading="lazy" class="modal-img">
         </div>
     </div>
-
+    
     <div id="wildlife-modal" class="gallery-modal">
         <span class="close-modal" onclick="closeGallery('wildlife-modal')">&times;</span>
         <div class="modal-content-wrapper">
