@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -399,6 +399,517 @@
             document.getElementById('sports-category-menu').style.display = "none";
             document.getElementById(id).style.display = "block";
             document.body.style.overflow = "hidden"; 
+        }
+
+        function closeGallery(id) {
+            document.getElementById(id).style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+
+        const modals = document.querySelectorAll('.gallery-modal');
+        modals.forEach(modal => {
+            modal.addEventListener('wheel', (evt) => {
+                if (Math.abs(evt.deltaY) > Math.abs(evt.deltaX)) {
+                    evt.preventDefault();
+                    modal.scrollLeft += evt.deltaY;
+                }
+            }, { passive: false });
+        });
+
+        window.onclick = function(event) {
+            if (event.target.className === "gallery-modal" || event.target.id === "sports-category-menu") {
+                event.target.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        }
+    </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RITESH MANNA | Photography Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+
+        section, footer {
+            scroll-margin-top: 100px;
+        }
+
+        /* --- STAGGERED GALLERY GRID & SNAP LOGIC --- */
+        .gallery-container {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 2rem;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+        .gallery-container::-webkit-scrollbar { display: none; }
+
+        .gallery-item {
+            flex: 0 0 85%;
+            scroll-snap-align: center;
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            height: 450px;
+            border: 1px solid #30363d;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Desktop Staggered Alignment */
+        @media (min-width: 768px) {
+            .gallery-container {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 2rem;
+                overflow: visible;
+            }
+            .gallery-item { flex: none; width: 100%; }
+            .card-1 { grid-column: span 3; height: 550px; }
+            .card-2 { grid-column: span 3; height: 480px; margin-top: 40px; }
+            .card-3 { grid-column: span 2; height: 400px; }
+            
+            /* Slid down Concerts section */
+            .card-4 { grid-column: span 2; height: 500px; margin-top: 42px; } 
+            
+            .card-5 { grid-column: span 2; height: 450px; }
+        }
+
+        .item-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(13, 17, 23, 0.95) 5%, transparent 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+            transition: all 0.4s ease;
+        }
+
+        .gallery-item:hover {
+            border-color: #2dd4bf;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+            filter: brightness(0.6);
+        }
+
+        .gallery-item img {
+            transition: all 0.8s ease;
+        }
+
+        /* --- MODAL SYSTEM --- */
+        .gallery-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(13, 17, 23, 0.98);
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+        }
+
+        .category-overlay {
+            display: none;
+            position: fixed;
+            z-index: 9998;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(13, 17, 23, 0.95);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .modal-content-wrapper {
+            display: inline-flex;
+            align-items: center;
+            height: 100%;
+            padding: 0 10vw;
+            gap: 5vw;
+        }
+
+        .modal-img {
+            height: 75vh;
+            width: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            display: inline-block;
+            scroll-snap-align: center;
+        }
+
+        .close-modal {
+            position: fixed;
+            top: 25px;
+            right: 30px;
+            font-size: 35px;
+            color: #2dd4bf;
+            cursor: pointer;
+            z-index: 10000;
+            background: rgba(22, 27, 34, 0.8);
+            width: 50px;
+            height: 50px;
+            line-height: 45px;
+            text-align: center;
+            border-radius: 50%;
+            border: 1px solid #30363d;
+        }
+
+        .gallery-modal::-webkit-scrollbar {
+            height: 6px;
+        }
+        .gallery-modal::-webkit-scrollbar-thumb {
+            background: #2dd4bf;
+            border-radius: 10px;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="sticky top-0 z-50 bg-[#0d1117] border-b border-[#30363d] px-6 py-4 flex justify-between items-center bg-opacity-95">
+        <h1 class="text-xl font-black text-[#2dd4bf] tracking-tighter uppercase">Ritesh Manna</h1>
+        <nav class="hidden md:flex space-x-8 text-xs font-bold uppercase tracking-widest text-gray-400">
+            <a href="#projects" class="hover:text-[#2dd4bf] transition">Galleries</a>
+            <a href="#contact" class="hover:text-[#2dd4bf] transition">Contact</a>
+            <a href="#about" class="hover:text-[#2dd4bf] transition">About</a>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6">
+
+        <section class="py-20 flex flex-col items-center text-center">
+            <img src="./images/mypic/profile pic.jpg" alt="RITESH MANNA Profile"
+                 class="w-40 h-40 rounded-full object-cover mb-6 border-4 border-[#2dd4bf] shadow-2xl">
+            
+            <h2 class="text-4xl md:text-6xl font-black mb-4 text-white uppercase tracking-tight">RITESH <span class="text-[#2dd4bf]">MANNA</span></h2>
+            <p class="text-sm md:text-base text-gray-500 max-w-lg uppercase tracking-[0.3em] font-medium">
+                Sports • Concerts • Wildlife Photographer
+            </p>
+        </section>
+
+        <section id="projects" class="py-10 max-w-7xl mx-auto mb-20">
+            <p class="text-center text-white text-[10px] mb-10 md:hidden italic uppercase tracking-[0.2em] animate-pulse">
+              Please swipe or rotate mobile for full view
+            </p>
+
+            <div class="gallery-container">
+                <div class="gallery-item card-1 reveal active" onclick="toggleSportsMenu(true)">
+                    <img src="./images/sports/rdfl (18).jpg" alt="Football" class="w-full h-full object-cover">
+                    <div class="item-overlay">
+                        <span class="text-[#2dd4bf] text-[10px] font-black tracking-widest uppercase mb-1">League Action</span>
+                        <h3 class="text-2xl font-black text-white uppercase">Football</h3>
+                    </div>
+                </div>
+
+                <div class="gallery-item card-2 reveal active" onclick="openGallery('cricket-modal')">
+                    <img src="./images/cricket/cricket (2).jpg" alt="Cricket" class="w-full h-full object-cover">
+                    <div class="item-overlay">
+                        <span class="text-[#2dd4bf] text-[10px] font-black tracking-widest uppercase mb-1">Precision</span>
+                        <h3 class="text-2xl font-black text-white uppercase">Cricket</h3>
+                    </div>
+                </div>
+
+                <div class="gallery-item card-3 reveal active" onclick="openGallery('karate-modal')">
+                    <img src="./images/Karate/karate 12.jpg" alt="Karate" class="w-full h-full object-cover">
+                    <div class="item-overlay">
+                        <span class="text-[#2dd4bf] text-[10px] font-black tracking-widest uppercase mb-1">Martial Arts</span>
+                        <h3 class="text-xl font-black text-white uppercase">Kyokushin</h3>
+                    </div>
+                </div>
+
+                <div class="gallery-item card-4 reveal active" onclick="openGallery('concert-modal')">
+                    <img src="./images/contest/_DSC0135.jpg" alt="Concerts" class="w-full h-full object-cover">
+                    <div class="item-overlay">
+                        <span class="text-[#2dd4bf] text-[10px] font-black tracking-widest uppercase mb-1">Live Events</span>
+                        <h3 class="text-xl font-black text-white uppercase">Concerts</h3>
+                    </div>
+                </div>
+
+                <div class="gallery-item card-5 reveal active" onclick="openGallery('wildlife-modal')">
+                    <img src="./images/wildlife/Ritesh wildlife.jpg" alt="Wildlife" class="w-full h-full object-cover">
+                    <div class="item-overlay">
+                        <span class="text-[#2dd4bf] text-[10px] font-black tracking-widest uppercase mb-1">Nature</span>
+                        <h3 class="text-xl font-black text-white uppercase">Wildlife</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-24 px-6 bg-[#0d1117] reveal">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center mb-12 text-[#2dd4bf] uppercase tracking-wider">Contact Me</h2>
+                <div class="bg-[#161b22] border border-[#30363d] rounded-3xl p-8 md:p-12 shadow-2xl text-center">
+                    <h3 class="text-white uppercase tracking-[0.2em] text-xs font-black mb-6">Ready to collaborate? Reach me via:</h3>
+                    <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+                        <a href="tel:8944021957" class="group w-full md:w-auto flex items-center justify-center gap-3 bg-[#0d1117] border border-[#30363d] px-8 py-4 rounded-xl hover:border-[#2dd4bf] transition-all">
+                            <span class="text-gray-400 group-hover:text-[#2dd4bf]">📞</span>
+                            <span class="text-white font-mono font-bold tracking-wider">8944021957</span>
+                        </a>
+                        <a href="mailto:riteshmanna100@gmail.com" class="group w-full md:w-auto bg-[#0d1117] border border-[#30363d] px-8 py-4 rounded-xl hover:border-[#2dd4bf] transition-all flex items-center justify-center gap-3">
+                            <span class="text-white font-mono font-bold tracking-wider">✉️ riteshmanna100@gmail.com</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-16 max-w-5xl mx-auto reveal mb-20">
+            <div class="grid md:grid-cols-2 gap-12 items-center bg-[#161b22] p-8 md:p-12 rounded-3xl border border-[#30363d]">
+                <div class="relative group">
+                    <img src="./images/mypic/_DSC0459.jpg" alt="Ritesh Manna" class="rounded-2xl shadow-2xl grayscale hover:grayscale-0 transition duration-500 w-full h-auto object-cover">
+                </div>
+                
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-black text-white uppercase tracking-tight">Behind <span class="text-[#2dd4bf]">The Lens</span></h3>
+                    <div class="text-gray-400 text-sm leading-relaxed space-y-4 font-medium">
+                        <p>
+                            My journey behind the lens started back in the 11th grade with nothing but a smartphone and a curiosity for capturing landscapes and small details. That initial spark turned into a real obsession by my first year of college when I finally got my first DSLR. I spent those years practicing everything—from the quiet patience of wildlife and street photography to the high energy of portraits and live music.
+                        </p>
+                        <p>
+                            After finishing college, I decided to stop treating photography as just a hobby and started taking it seriously as a career. Since then, I’ve been out there every day, working hard to find that one great opportunity to show what I can really do. Whether I’m freezing a split-second goal on the field or capturing the raw intensity of an event, I love the pressure of knowing you only have one shot to get it right.
+                        </p>
+                        <p>
+                            Right now, I specialize in <span class="text-white">Sports, Events, and Wildlife</span> photography. I don’t just take pictures; I look for those "perfect moments" that tell a story. From mastering fast shutter speeds on the field to the final touches in Lightroom and CapCut, I’m dedicated to making people feel the speed and emotion of the action. I’m looking for the right team, club, or media house where I can bring that hustle and help create something great.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="sports-category-menu" class="category-overlay">
+        <span class="close-modal" onclick="toggleSportsMenu(false)">&times;</span>
+        <h2 class="text-2xl font-black text-white mb-10 tracking-[0.3em] uppercase">Select League</h2>
+        <div class="flex flex-col md:flex-row gap-6">
+            <button onclick="openGallery('sports-modal')" class="px-12 py-6 bg-[#161b22] border-2 border-[#2dd4bf] text-[#2dd4bf] rounded-2xl font-black uppercase tracking-widest hover:bg-[#2dd4bf] hover:text-[#0d1117] transition-all">BSL</button>
+            <button onclick="openGallery('rfdl-modal')" class="px-12 py-6 bg-[#161b22] border-2 border-[#2dd4bf] text-[#2dd4bf] rounded-2xl font-black uppercase tracking-widest hover:bg-[#2dd4bf] hover:text-[#0d1117] transition-all">RFDL</button>
+        </div>
+    </div>
+
+    <div id="sports-modal" class="gallery-modal">
+        <span class="close-modal" onclick="closeGallery('sports-modal')">&times;</span>
+        <div class="modal-content-wrapper">
+            <img src="./images/sports/football 44.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 42.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 43.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 41.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 40.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 39.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 37.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 36.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 30.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 35.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 32.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 33.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 34.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 31.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 26.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 29.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 22.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 23.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 27.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 25.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 24.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 28.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football21 (1).jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football21 (11).jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football21 (3).jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football21 (6).jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football21 (4).jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football21 (7).jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football21 (8).jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football21 (2).jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football21 (10).jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football21 (9).jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football21 (5).jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football2.jpg" loading="lazy" class="modal-img">
+            <img src="./images/sports/football9.jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/football5.jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/football12.jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/football14.jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/football6.jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/football15.jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/football13.jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/football18.jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/football20.jpg" loading="lazy"class="modal-img">
+        </div>
+    </div>
+
+    <div id="rfdl-modal" class="gallery-modal">
+        <span class="close-modal" onclick="closeGallery('rfdl-modal')">&times;</span>
+        <div class="modal-content-wrapper">
+            <img src="./images/sports/rdfl (6).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (11).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (2).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (13).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (10).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (9).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (8).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (3).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (14).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (7).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (4).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (5).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (16).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (12).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (1).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (17).jpg" loading="lazy"class="modal-img">
+            <img src="./images/sports/rdfl (18).jpg" loading="lazy"class="modal-img">
+        </div>
+    </div>
+
+    <div id="cricket-modal" class="gallery-modal">
+        <span class="close-modal" onclick="closeGallery('cricket-modal')">&times;</span>
+        <div class="modal-content-wrapper">
+            <img src="./images/cricket/cricket (2).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (3).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (1).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (4).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (5).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (9).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (15).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (16).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (14).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (13).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (17).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (18).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (10).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (8).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (7).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (11).jpg" loading="lazy"class="modal-img">
+            <img src="./images/cricket/cricket (6).jpg" loading="lazy"class="modal-img">
+        </div>
+    </div>
+
+    <div id="karate-modal" class="gallery-modal">
+        <span class="close-modal" onclick="closeGallery('karate-modal')">&times;</span>
+        <div class="modal-content-wrapper">
+            <img src="./images/Karate/karate 12.jpg" loading="lazy"class="modal-img">
+            <img src="./images/Karate/karate 13.jpg" loading="lazy"class="modal-img">
+            <img src="./images/Karate/karate 11.jpg" loading="lazy"class="modal-img">
+            <img src="./images/Karate/karate 10.jpg" loading="lazy"class="modal-img">
+            <img src="./images/Karate/karate 9.jpg" loading="lazy"class="modal-img">
+            <img src="./images/Karate/karate 5.jpg" loading="lazy"class="modal-img">
+            <img src="./images/Karate/karate 7.jpg" loading="lazy"class="modal-img">
+            <img src="./images/Karate/karate 6.jpg" loading="lazy"class="modal-img">
+            <img src="./images/Karate/karate 3.jpg" loading="lazy"class="modal-img">
+            <img src="./images/Karate/karate 2.jpg" loading="lazy"class="modal-img">
+            <img src="./images/Karate/karate 1.jpg" loading="lazy"class="modal-img">
+            <img src="./images/Karate/karate 11.jpg" loading="lazy"class="modal-img">
+            <img src="./images/Karate/karate 15.jpg" loading="lazy"class="modal-img">
+            <img src="./images/Karate/karate 16.jpg" loading="lazy"class="modal-img">
+        </div>
+    </div>
+
+    <div id="concert-modal" class="gallery-modal">
+        <span class="close-modal" onclick="closeGallery('concert-modal')">&times;</span>
+        <div class="modal-content-wrapper">
+            <img src="./images/contest/_DSC0138.jpg" loading="lazy"class="modal-img">
+            <img src="./images/contest/_DSC0135.jpg" loading="lazy"class="modal-img">
+            <img src="./images/contest/_DSC0197.jpg" loading="lazy"class="modal-img">
+            <img src="./images/contest/_DSC0144.jpg" loading="lazy"class="modal-img">
+            <img src="./images/contest/_DSC0208.jpg" loading="lazy"class="modal-img">
+            <img src="./images/contest/_DSC0404 (1).jpg" loading="lazy"class="modal-img">
+            <img src="./images/contest/_DSC0383.jpg" loading="lazy"class="modal-img">
+            <img src="./images/contest/_DSC0478.jpg" loading="lazy"class="modal-img">
+            <img src="./images/contest/_DSC0386.jpg" loading="lazy"class="modal-img">
+            <img src="./images/contest/_DSC0768.jpg" loading="lazy"class="modal-img">
+            <img src="./images/contest/_DSC0481.jpg" loading="lazy"class="modal-img">
+            <img src="./images/contest/_DSC0428.jpg" loading="lazy"class="modal-img">
+            <img src="./images/contest/_DSC0460.jpg" loading="lazy" class="modal-img">
+        </div>
+    </div>
+    
+    <div id="wildlife-modal" class="gallery-modal">
+        <span class="close-modal" onclick="closeGallery('wildlife-modal')">&times;</span>
+        <div class="modal-content-wrapper">
+            <img src="./images/wildlife/Ritesh wildlife.jpg" class="modal-img">
+            <img src="./images/wildlife/_DSC0159.jpg" loading="lazy"class="modal-img">
+            <img src="./images/wildlife/_DSC0182.jpg" loading="lazy"class="modal-img">
+            <img src="./images/wildlife/Picsart_23-02-13_21-33-31-415.jpg"loading="lazy" class="modal-img">
+            <img src="./images/wildlife/Picsart_23-02-13_21-39-56-495.jpg" loading="lazy" class="modal-img">
+            <img src="./images/wildlife/Picsart_23-02-13_21-41-58-472.jpg" loading="lazy" class="modal-img">
+            <img src="./images/wildlife/Picsart_23-02-13_21-54-43-929.jpg" loading="lazy" class="modal-img">
+            <img src="./images/wildlife/Picsart_23-02-13_22-03-22-885.jpg" loading="lazy" class="modal-img">
+            <img src="./images/wildlife/Picsart_25-02-05_12-21-58-182.jpg" loading="lazy"class="modal-img">
+            <img src="./images/wildlife/Picsart_25-02-05_12-25-18-153.jpg" loading="lazy"class="modal-img">
+        </div>
+    </div>
+
+    <footer class="bg-card-bg mt-12 py-8 border-t border-card-bg">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm text-gray-500">
+                &copy; <span id="year"></span> RITESH MANNA. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                if (elementTop < windowHeight - 150) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal();
+
+        function toggleSportsMenu(show) {
+            const menu = document.getElementById('sports-category-menu');
+            menu.style.display = show ? "flex" : "none";
+            document.body.style.overflow = show ? "hidden" : "auto";
+        }
+
+        function openGallery(id) {
+            document.getElementById('sports-category-menu').style.display = "none";
+            document.getElementById(id).style.display = "block";
+            document.body.style.overflow = "hidden";
         }
 
         function closeGallery(id) {
