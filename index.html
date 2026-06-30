@@ -544,7 +544,7 @@
             transition: all 0.8s ease;
         }
 
-        /* --- MODAL SYSTEM: TRACKPAD ZOOM COMPATIBLE --- */
+        /* --- MODAL SYSTEM: MASONRY LAYOUT --- */
         .gallery-modal {
             display: none;
             position: fixed;
@@ -554,12 +554,9 @@
             width: 100%;
             height: 100%;
             background-color: rgba(13, 17, 23, 0.98);
-            overflow-x: auto;
-            overflow-y: hidden;
-            white-space: nowrap;
-            /* Allow trackpad pinch-to-zoom and horizontal panning */
-            touch-action: pan-x pinch-zoom; 
-            scroll-snap-type: x mandatory;
+            overflow-x: hidden;
+            overflow-y: auto;
+            touch-action: pan-y pinch-zoom; 
         }
 
         .category-overlay {
@@ -577,28 +574,56 @@
         }
 
         .modal-content-wrapper {
-            display: inline-flex;
-            align-items: center;
-            height: 100%;
-            padding: 0 6vw;
-            gap: 2vw;
-        }
-
-        .modal-content-wrapper::after {
-            content: '';
-            display: inline-block;
-            min-width: 4vw; 
-            height: 10px;
+            column-count: 2;
+            column-gap: 4px;
+            width: 100%;
+            max-width: 1400px; 
+            margin: 0 auto;
+            padding: 80px 4px 4px 4px;
         }
 
         .modal-img {
-            max-height: 80vh;
-            width: auto;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-            display: inline-block;
-            scroll-snap-align: center;
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 4px;
+            break-inside: avoid;
             pointer-events: auto; 
+            cursor: zoom-in;
+            transition: filter 0.3s ease;
+        }
+
+        .modal-img:hover {
+            filter: brightness(0.85);
+        }
+
+        /* --- LIGHTBOX STYLES FOR SINGLE FOCUSED IMAGE --- */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            z-index: 10001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(7, 9, 13, 0.98);
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-out;
+        }
+
+        .lightbox-img {
+            max-width: 95%;
+            max-height: 95vh;
+            object-fit: contain;
+            border-radius: 4px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            animation: zoomEffect 0.25s ease-out;
+        }
+
+        @keyframes zoomEffect {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .close-modal {
@@ -619,7 +644,7 @@
         }
 
         .gallery-modal::-webkit-scrollbar {
-            height: 6px;
+            width: 6px;
         }
         .gallery-modal::-webkit-scrollbar-thumb {
             background: #2dd4bf;
@@ -675,7 +700,7 @@
                     </div>
                 </div>
 
-                <div class="gallery-item card-2 reveal active" onclick="openGallery('cricket-modal')">
+                <div class="gallery-item card-2 reveal active" onclick="toggleCricketMenu(true)">
                     <img src="./images/cricket/cricket (2).webp" alt="Cricket" class="w-full h-full object-cover">
                     <div class="item-overlay">
                         <span class="text-[#2dd4bf] text-[10px] font-black tracking-widest uppercase mb-1">Precision</span>
@@ -773,6 +798,7 @@
 
     </main>
 
+    <!-- FOOTBALL LEAGUE SELECTION MENU -->
     <div id="sports-category-menu" class="category-overlay">
         <span class="close-modal" onclick="toggleSportsMenu(false)">&times;</span>
         <h2 class="text-2xl font-black text-white mb-10 tracking-[0.3em] uppercase">Select League</h2>
@@ -782,134 +808,218 @@
         </div>
     </div>
 
+    <!-- CRICKET LEAGUE SELECTION MENU -->
+    <div id="cricket-category-menu" class="category-overlay">
+        <span class="close-modal" onclick="toggleCricketMenu(false)">&times;</span>
+        <h2 class="text-2xl font-black text-white mb-10 tracking-[0.3em] uppercase">Select Tournament</h2>
+        <div class="flex flex-col md:flex-row gap-6">
+            <button onclick="openGallery('cricket-modal')" class="px-12 py-6 bg-[#161b22] border-2 border-[#2dd4bf] text-[#2dd4bf] rounded-2xl font-black uppercase tracking-widest hover:bg-[#2dd4bf] hover:text-[#0d1117] transition-all">First Division League</button>
+            <button onclick="openGallery('bengal-t20-modal')" class="px-12 py-6 bg-[#161b22] border-2 border-[#2dd4bf] text-[#2dd4bf] rounded-2xl font-black uppercase tracking-widest hover:bg-[#2dd4bf] hover:text-[#0d1117] transition-all">Bengal T20 League</button>
+        </div>
+    </div>
+
     <div id="sports-modal" class="gallery-modal">
         <span class="close-modal" onclick="closeGallery('sports-modal')">&times;</span>
         <div class="modal-content-wrapper">
-            <img src="./images/sports/football 44.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 42.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 43.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 41.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 40.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 39.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 37.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 36.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 30.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 35.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 32.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 33.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 34.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 31.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 26.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 29.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 22.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 23.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 27.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 25.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 24.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football 28.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football21 (1).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football21 (11).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football21 (3).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football21 (6).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football21 (4).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football21 (7).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football21 (8).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football21 (2).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football21 (10).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football21 (9).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football21 (5).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football2.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football9.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football5.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football12.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football14.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football6.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football15.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football13.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football18.webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/football20.webp" loading="lazy" class="modal-img">
+            <img src="./images/sports/football 44.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 42.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 43.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 41.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 40.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 39.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 37.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 36.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 30.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 35.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 32.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 33.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 34.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 31.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 26.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 29.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 22.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 23.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 27.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 25.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 24.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football 28.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football21 (1).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football21 (11).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football21 (3).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football21 (6).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football21 (4).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football21 (7).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football21 (8).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football21 (2).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football21 (10).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football21 (9).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football21 (5).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football2.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football9.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football5.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football12.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football14.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football6.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football15.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football13.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football18.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/football20.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
         </div>
     </div>
 
     <div id="rfdl-modal" class="gallery-modal">
         <span class="close-modal" onclick="closeGallery('rfdl-modal')">&times;</span>
         <div class="modal-content-wrapper">
-            <img src="./images/sports/rdfl (6).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (11).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (2).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (13).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (10).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (9).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (8).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (3).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (14).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (7).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (4).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (5).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (16).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (12).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (1).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (17).webp" loading="lazy" class="modal-img">
-            <img src="./images/sports/rdfl (18).webp" loading="lazy" class="modal-img">
+            <img src="./images/sports/rdfl (6).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (11).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (2).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (13).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (10).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (9).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (8).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (3).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (14).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (7).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (4).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (5).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (16).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (12).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (1).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (17).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/rdfl (18).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
         </div>
     </div>
 
+    <!-- CRICKET: FIRST DIVISION LEAGUE MODAL -->
     <div id="cricket-modal" class="gallery-modal">
         <span class="close-modal" onclick="closeGallery('cricket-modal')">&times;</span>
         <div class="modal-content-wrapper">
-            <img src="./images/cricket/cricket (2).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (3).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (1).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (4).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (5).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (9).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (15).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (16).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (14).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (13).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (17).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (18).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (10).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (8).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (7).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (11).webp" loading="lazy" class="modal-img">
-            <img src="./images/cricket/cricket (6).webp" loading="lazy" class="modal-img">
+            <img src="./images/cricket/cricket (2).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (3).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (1).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (4).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (5).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (9).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (15).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (16).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (14).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (13).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (17).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (18).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (10).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (8).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (7).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (11).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/cricket/cricket (6).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+        </div>
+    </div>
+
+    <!-- CRICKET: BENGAL T20 LEAGUE MODAL (ALL 60 WEBP IMAGES GENERATED) -->
+    <div id="bengal-t20-modal" class="gallery-modal">
+        <span class="close-modal" onclick="closeGallery('bengal-t20-modal')">&times;</span>
+        <div class="modal-content-wrapper">
+            <img src="./images/sports/BT20L/img1.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img2.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img3.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img4.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img5.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img6.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img7.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img8.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img9.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img10.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img11.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img12.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img13.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img14.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img15.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img16.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img17.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img18.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img19.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img20.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img21.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img22.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img23.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img24.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img25.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img26.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img27.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img28.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img29.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img30.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+             <img src="./images/sports/BT20L/img61.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img31.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img32.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img33.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img34.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img35.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img36.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img37.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img38.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img39.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img40.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img41.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img42.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img43.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img44.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img45.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img46.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img47.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img48.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img49.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img50.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img51.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img52.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img53.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img54.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img55.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img56.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img57.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img58.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img59.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/sports/BT20L/img60.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
         </div>
     </div>
 
     <div id="karate-modal" class="gallery-modal">
         <span class="close-modal" onclick="closeGallery('karate-modal')">&times;</span>
         <div class="modal-content-wrapper">
-            <img src="./images/Karate/karate 12.webp" loading="lazy" class="modal-img">
-            <img src="./images/Karate/karate 13.webp" loading="lazy" class="modal-img">
-            <img src="./images/Karate/karate 11.webp" loading="lazy" class="modal-img">
-            <img src="./images/Karate/karate 10.webp" loading="lazy" class="modal-img">
-            <img src="./images/Karate/karate 9.webp" loading="lazy" class="modal-img">
-            <img src="./images/Karate/karate 5.webp" loading="lazy" class="modal-img">
-            <img src="./images/Karate/karate 7.webp" loading="lazy" class="modal-img">
-            <img src="./images/Karate/karate 6.webp" loading="lazy" class="modal-img">
-            <img src="./images/Karate/karate 3.webp" loading="lazy" class="modal-img">
-            <img src="./images/Karate/karate 2.webp" loading="lazy" class="modal-img">
-            <img src="./images/Karate/karate 1.webp" loading="lazy" class="modal-img">
-            <img src="./images/Karate/karate 15.webp" loading="lazy" class="modal-img">
-            <img src="./images/Karate/karate 16.webp" loading="lazy" class="modal-img">
+            <img src="./images/Karate/karate 12.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/Karate/karate 13.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/Karate/karate 11.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/Karate/karate 10.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/Karate/karate 9.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/Karate/karate 5.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/Karate/karate 7.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/Karate/karate 6.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/Karate/karate 3.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/Karate/karate 2.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/Karate/karate 1.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/Karate/karate 15.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/Karate/karate 16.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
         </div>
     </div>
     
     <div id="wildlife-modal" class="gallery-modal">
         <span class="close-modal" onclick="closeGallery('wildlife-modal')">&times;</span>
         <div class="modal-content-wrapper">
-            <img src="./images/wildlife/Ritesh wildlife.webp" class="modal-img">
-            <img src="./images/wildlife/_DSC0159.webp" loading="lazy" class="modal-img">
-            <img src="./images/wildlife/_DSC0182.webp" loading="lazy" class="modal-img">
-            <img src="./images/wildlife/Picsart_23-02-13_21-33-31-415.webp" loading="lazy" class="modal-img">
-            <img src="./images/wildlife/Picsart_23-02-13_21-39-56-495.webp" loading="lazy" class="modal-img">
-            <img src="./images/wildlife/Picsart_23-02-13_21-41-58-472.webp" loading="lazy" class="modal-img">
-            <img src="./images/wildlife/Picsart_23-02-13_21-54-43-929.webp" loading="lazy" class="modal-img">
-            <img src="./images/wildlife/Picsart_23-02-13_22-03-22-885.webp" loading="lazy" class="modal-img">
-            <img src="./images/wildlife/Picsart_25-02-05_12-21-58-182.webp" loading="lazy" class="modal-img">
-            <img src="./images/wildlife/Picsart_25-02-05_12-25-18-153.webp" loading="lazy" class="modal-img">
+            <img src="./images/wildlife/Ritesh wildlife.webp" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/wildlife/_DSC0159.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/wildlife/_DSC0182.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/wildlife/Picsart_23-02-13_21-33-31-415.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/wildlife/Picsart_23-02-13_21-39-56-495.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/wildlife/Picsart_23-02-13_21-41-58-472.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/wildlife/Picsart_23-02-13_21-54-43-929.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/wildlife/Picsart_23-02-13_22-03-22-885.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/wildlife/Picsart_25-02-05_12-21-58-182.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/wildlife/Picsart_25-02-05_12-25-18-153.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
         </div>
+    </div>
+
+    <!-- NEW LIGHTBOX MARKUP FOR FOCUSING A SINGLE IMAGE -->
+    <div id="lightbox-container" class="lightbox-modal" onclick="closeFocusedImage()">
+        <img id="lightbox-target" src="" class="lightbox-img" alt="Focused view">
     </div>
 
     <footer class="bg-[#161b22] mt-12 py-8 border-t border-[#30363d]">
@@ -945,13 +1055,22 @@
             document.body.style.overflow = show ? "hidden" : "auto";
         }
 
+        function toggleCricketMenu(show) {
+            const menu = document.getElementById('cricket-category-menu');
+            menu.style.display = show ? "flex" : "none";
+            document.body.style.overflow = show ? "hidden" : "auto";
+        }
+
         function openGallery(id) {
-            const menu = document.getElementById('sports-category-menu');
-            if (menu) menu.style.display = "none";
+            const sportsMenu = document.getElementById('sports-category-menu');
+            if (sportsMenu) sportsMenu.style.display = "none";
+            
+            const cricketMenu = document.getElementById('cricket-category-menu');
+            if (cricketMenu) cricketMenu.style.display = "none";
             
             const modal = document.getElementById(id);
             modal.style.display = "block";
-            modal.scrollLeft = 0;
+            modal.scrollTop = 0;
             document.body.style.overflow = "hidden";
         }
 
@@ -960,29 +1079,36 @@
             document.body.style.overflow = "auto";
         }
 
-        // --- TRACKPAD & SCROLL DEBUGGED LOGIC ---
+        /* --- FUNCTION TO SHOW ONLY THE CLICKED IMAGE --- */
+        function focusImage(element) {
+            const lightbox = document.getElementById('lightbox-container');
+            const lightboxTarget = document.getElementById('lightbox-target');
+            
+            lightboxTarget.src = element.src;
+            lightbox.style.display = "flex";
+        }
+
+        /* --- FUNCTION TO CLOSE THE FOCUSED VIEW --- */
+        function closeFocusedImage() {
+            const lightbox = document.getElementById('lightbox-container');
+            lightbox.style.display = "none";
+        }
+
+        // --- WHEEL LOGIC OPTIMIZED ---
         const modals = document.querySelectorAll('.gallery-modal');
         modals.forEach(modal => {
             modal.addEventListener('wheel', (evt) => {
-                // 1. If user is pinching (zoom), do nothing and let browser handle it
                 if (evt.ctrlKey) {
                     return; 
                 }
-
-                // 2. If the user is already scrolling horizontally, let browser handle it
-                if (Math.abs(evt.deltaX) > Math.abs(evt.deltaY)) {
-                    return;
-                }
-
-                // 3. Convert vertical scroll to horizontal scroll
-                evt.preventDefault();
-                modal.scrollLeft += evt.deltaY;
-            }, { passive: false });
+            }, { passive: true });
         });
 
-        // Click outside to close
+        // Click outside to close standard overlay menus
         window.onclick = function(event) {
-            if (event.target.className === "gallery-modal" || event.target.id === "sports-category-menu") {
+            if (event.target.className === "gallery-modal" || 
+                event.target.id === "sports-category-menu" || 
+                event.target.id === "cricket-category-menu") {
                 event.target.style.display = "none";
                 document.body.style.overflow = "auto";
             }
