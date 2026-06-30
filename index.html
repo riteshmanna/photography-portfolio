@@ -798,7 +798,6 @@
 
     </main>
 
-    <!-- FOOTBALL LEAGUE SELECTION MENU -->
     <div id="sports-category-menu" class="category-overlay">
         <span class="close-modal" onclick="toggleSportsMenu(false)">&times;</span>
         <h2 class="text-2xl font-black text-white mb-10 tracking-[0.3em] uppercase">Select League</h2>
@@ -808,7 +807,6 @@
         </div>
     </div>
 
-    <!-- CRICKET LEAGUE SELECTION MENU -->
     <div id="cricket-category-menu" class="category-overlay">
         <span class="close-modal" onclick="toggleCricketMenu(false)">&times;</span>
         <h2 class="text-2xl font-black text-white mb-10 tracking-[0.3em] uppercase">Select Tournament</h2>
@@ -890,7 +888,6 @@
         </div>
     </div>
 
-    <!-- CRICKET: FIRST DIVISION LEAGUE MODAL -->
     <div id="cricket-modal" class="gallery-modal">
         <span class="close-modal" onclick="closeGallery('cricket-modal')">&times;</span>
         <div class="modal-content-wrapper">
@@ -914,7 +911,6 @@
         </div>
     </div>
 
-    <!-- CRICKET: BENGAL T20 LEAGUE MODAL (ALL 60 WEBP IMAGES GENERATED) -->
     <div id="bengal-t20-modal" class="gallery-modal">
         <span class="close-modal" onclick="closeGallery('bengal-t20-modal')">&times;</span>
         <div class="modal-content-wrapper">
@@ -1017,7 +1013,6 @@
         </div>
     </div>
 
-    <!-- NEW LIGHTBOX MARKUP FOR FOCUSING A SINGLE IMAGE -->
     <div id="lightbox-container" class="lightbox-modal" onclick="closeFocusedImage()">
         <img id="lightbox-target" src="" class="lightbox-img" alt="Focused view">
     </div>
@@ -1053,12 +1048,22 @@
             const menu = document.getElementById('sports-category-menu');
             menu.style.display = show ? "flex" : "none";
             document.body.style.overflow = show ? "hidden" : "auto";
+            if(show) {
+                window.history.pushState(null, null, "#football-menu");
+            } else if(window.location.hash === "#football-menu") {
+                clearHash();
+            }
         }
 
         function toggleCricketMenu(show) {
             const menu = document.getElementById('cricket-category-menu');
             menu.style.display = show ? "flex" : "none";
             document.body.style.overflow = show ? "hidden" : "auto";
+            if(show) {
+                window.history.pushState(null, null, "#cricket-menu");
+            } else if(window.location.hash === "#cricket-menu") {
+                clearHash();
+            }
         }
 
         function openGallery(id) {
@@ -1069,15 +1074,59 @@
             if (cricketMenu) cricketMenu.style.display = "none";
             
             const modal = document.getElementById(id);
-            modal.style.display = "block";
-            modal.scrollTop = 0;
-            document.body.style.overflow = "hidden";
+            if (modal) {
+                modal.style.display = "block";
+                modal.scrollTop = 0;
+                document.body.style.overflow = "hidden";
+                window.history.pushState(null, null, "#" + id);
+            }
         }
 
         function closeGallery(id) {
-            document.getElementById(id).style.display = "none";
-            document.body.style.overflow = "auto";
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto";
+                if(window.location.hash === "#" + id) {
+                    clearHash();
+                }
+            }
         }
+
+        function clearHash() {
+            window.history.pushState(null, null, window.location.pathname + window.location.search);
+        }
+
+        /* --- DEEP LINKING ROUTER --- */
+        function checkUrlHash() {
+            const hash = window.location.hash;
+            
+            // Close all open menus or modals first
+            document.getElementById('sports-category-menu').style.display = "none";
+            document.getElementById('cricket-category-menu').style.display = "none";
+            document.querySelectorAll('.gallery-modal').forEach(m => m.style.display = "none");
+            document.body.style.overflow = "auto";
+
+            if (!hash) return;
+
+            if (hash === "#football-menu") {
+                toggleSportsMenu(true);
+            } else if (hash === "#cricket-menu") {
+                toggleCricketMenu(true);
+            } else {
+                const targetModal = document.getElementById(hash.replace("#", ""));
+                if (targetModal && targetModal.classList.contains('gallery-modal')) {
+                    targetModal.style.display = "block";
+                    targetModal.scrollTop = 0;
+                    document.body.style.overflow = "hidden";
+                }
+            }
+        }
+
+        // Listen for back/forward browser button clicks
+        window.addEventListener('hashchange', checkUrlHash);
+        // Check hash on initial load
+        window.addEventListener('DOMContentLoaded', checkUrlHash);
 
         /* --- FUNCTION TO SHOW ONLY THE CLICKED IMAGE --- */
         function focusImage(element) {
@@ -1106,11 +1155,12 @@
 
         // Click outside to close standard overlay menus
         window.onclick = function(event) {
-            if (event.target.className === "gallery-modal" || 
-                event.target.id === "sports-category-menu" || 
-                event.target.id === "cricket-category-menu") {
-                event.target.style.display = "none";
-                document.body.style.overflow = "auto";
+            if (event.target.className === "gallery-modal") {
+                closeGallery(event.target.id);
+            } else if (event.target.id === "sports-category-menu") {
+                toggleSportsMenu(false);
+            } else if (event.target.id === "cricket-category-menu") {
+                toggleCricketMenu(false);
             }
         }
     </script>
