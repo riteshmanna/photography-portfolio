@@ -390,7 +390,6 @@
 
     </main>
 
-    <!-- FOOTBALL LEAGUE SELECTION MENU -->
     <div id="sports-category-menu" class="category-overlay">
         <span class="close-modal" onclick="toggleSportsMenu(false)">&times;</span>
         <h2 class="text-2xl font-black text-white mb-10 tracking-[0.3em] uppercase">Select League</h2>
@@ -400,7 +399,6 @@
         </div>
     </div>
 
-    <!-- CRICKET LEAGUE SELECTION MENU -->
     <div id="cricket-category-menu" class="category-overlay">
         <span class="close-modal" onclick="toggleCricketMenu(false)">&times;</span>
         <h2 class="text-2xl font-black text-white mb-10 tracking-[0.3em] uppercase">Select Tournament</h2>
@@ -452,7 +450,6 @@
             <img src="./images/sports/football12.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
             <img src="./images/sports/football14.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
             <img src="./images/sports/football6.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
-            <img src="./images/sports/football15.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
             <img src="./images/sports/football13.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
             <img src="./images/sports/football18.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
             <img src="./images/sports/football20.webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
@@ -482,7 +479,6 @@
         </div>
     </div>
 
-    <!-- CRICKET: FIRST DIVISION LEAGUE MODAL -->
     <div id="cricket-modal" class="gallery-modal">
         <span class="close-modal" onclick="closeGallery('cricket-modal')">&times;</span>
         <div class="modal-content-wrapper three-col-wrapper">
@@ -510,7 +506,6 @@
         </div>
     </div>
 
-    <!-- CRICKET: BENGAL T20 LEAGUE MODAL -->
     <div id="bengal-t20-modal" class="gallery-modal">
         <span class="close-modal" onclick="closeGallery('bengal-t20-modal')">&times;</span>
         <div class="modal-content-wrapper three-col-wrapper">
@@ -621,7 +616,6 @@
         </div>
     </div>
 
-    <!-- NEW LIGHTBOX MARKUP FOR FOCUSING A SINGLE IMAGE -->
     <div id="lightbox-container" class="lightbox-modal" onclick="closeFocusedImage()">
         <img id="lightbox-target" src="" class="lightbox-img" alt="Focused view">
     </div>
@@ -652,20 +646,67 @@
         window.addEventListener("scroll", reveal);
         reveal();
 
-        // Modal controls
-        function toggleSportsMenu(show) {
+        // --- NEW: LINK SHARING ROUTING CONTROLLER ---
+        function updateURLState(viewId) {
+            if (viewId) {
+                history.pushState(null, null, "#" + viewId);
+            } else {
+                history.pushState(null, null, window.location.pathname + window.location.search);
+            }
+        }
+
+        function closeAllActiveViews() {
+            // Close selection menus
+            document.getElementById('sports-category-menu').style.display = "none";
+            document.getElementById('cricket-category-menu').style.display = "none";
+            
+            // Close modal sub-galleries
+            const elements = document.querySelectorAll('.gallery-modal');
+            elements.forEach(el => el.style.display = "none");
+            
+            // Restore document scrolling default status
+            document.body.style.overflow = "auto";
+        }
+
+        function checkDeepLinkRoute() {
+            const hash = window.location.hash.replace("#", "");
+            closeAllActiveViews();
+
+            if (!hash) return;
+
+            if (hash === "sports-category-menu") {
+                toggleSportsMenu(true, true);
+            } else if (hash === "cricket-category-menu") {
+                toggleCricketMenu(true, true);
+            } else {
+                const targetModal = document.getElementById(hash);
+                if (targetModal && targetModal.classList.contains('gallery-modal')) {
+                    openGallery(hash, true);
+                }
+            }
+        }
+
+        // Run checking whenever the back/forward button is hit or hash changes
+        window.addEventListener('hashchange', checkDeepLinkRoute);
+        window.addEventListener('load', checkDeepLinkRoute);
+
+
+        // Modal controls updated with Routing sync flags
+        function toggleSportsMenu(show, routeBypass = false) {
             const menu = document.getElementById('sports-category-menu');
             menu.style.display = show ? "flex" : "none";
             document.body.style.overflow = show ? "hidden" : "auto";
+            if (!routeBypass) updateURLState(show ? 'sports-category-menu' : null);
         }
 
-        function toggleCricketMenu(show) {
+        function toggleCricketMenu(show, routeBypass = false) {
             const menu = document.getElementById('cricket-category-menu');
             menu.style.display = show ? "flex" : "none";
             document.body.style.overflow = show ? "hidden" : "auto";
+            if (!routeBypass) updateURLState(show ? 'cricket-category-menu' : null);
         }
 
-        function openGallery(id) {
+        function openGallery(id, routeBypass = false) {
             const sportsMenu = document.getElementById('sports-category-menu');
             if (sportsMenu) sportsMenu.style.display = "none";
             
@@ -673,14 +714,18 @@
             if (cricketMenu) cricketMenu.style.display = "none";
             
             const modal = document.getElementById(id);
-            modal.style.display = "block";
-            modal.scrollTop = 0;
-            document.body.style.overflow = "hidden";
+            if (modal) {
+                modal.style.display = "block";
+                modal.scrollTop = 0;
+                document.body.style.overflow = "hidden";
+                if (!routeBypass) updateURLState(id);
+            }
         }
 
         function closeGallery(id) {
             document.getElementById(id).style.display = "none";
             document.body.style.overflow = "auto";
+            updateURLState(null);
         }
 
         /* --- FUNCTION TO SHOW ONLY THE CLICKED IMAGE --- */
@@ -715,6 +760,7 @@
                 event.target.id === "cricket-category-menu") {
                 event.target.style.display = "none";
                 document.body.style.overflow = "auto";
+                updateURLState(null);
             }
         }
     </script>
