@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ritesh Manna - Sports Photographer in Kolkata, India</title>
 
-    <meta name="description" content="Ritesh Manna - Professional Sports, Concert, and Wildlife Photographer. Explore high-quality photography portfolio.">
-    <meta name="keywords" content="Ritesh Manna, Sports Photographer West Bengal, India, Concert Photographer, Wildlife Photography, Photography Portfolio">
+    <meta name="description" content="Ritesh Manna - Professional Sports, Concert, Wildlife, and Product Photographer. Explore high-quality photography portfolio.">
+    <meta name="keywords" content="Ritesh Manna, Sports Photographer West Bengal, India, Concert Photographer, Wildlife Photography, Product Photography, Photography Portfolio">
     <meta name="author" content="Ritesh Manna">
 
     <meta property="og:title" content="Ritesh Manna | Photography Portfolio">
-    <meta property="og:description" content="Best photographer in West Bengal, Explore professional sports, concerts and wildlife photography by Ritesh Manna in West Bengal, India.">
+    <meta property="og:description" content="Best photographer in West Bengal, Explore professional sports, concerts, wildlife, and product photography by Ritesh Manna in West Bengal, India.">
     <meta property="og:image" content="https://ritesh-manna-portfolio.vercel.app/images/mypic/profile pic.webp">
     <meta property="og:url" content="https://ritesh-manna-portfolio.vercel.app/">
     <meta name="robots" content="index, follow">
@@ -89,7 +89,8 @@
             .card-3 { grid-column: span 2; height: 400px; }
             .card-4 { grid-column: span 2; height: 500px; margin-top: 42px; } 
             .card-5 { grid-column: span 2; height: 450px; }
-            .card-6 { grid-column: span 6; height: 500px; margin-top: 20px; }
+            .card-6 { grid-column: span 3; height: 500px; margin-top: 20px; }
+            .card-7 { grid-column: span 3; height: 500px; margin-top: 20px; }
         }
 
         .item-overlay {
@@ -275,7 +276,7 @@
             
             <h2 class="text-4xl md:text-6xl font-black mb-4 text-white uppercase tracking-tight">RITESH <span class="text-[#2dd4bf]">MANNA</span></h2>
             <p class="text-sm md:text-base text-gray-500 max-w-lg uppercase tracking-[0.3em] font-medium">
-                Sports • Concerts • Wildlife • Portraits Photographer
+                Sports • Concerts • Wildlife • Portraits • Commercial Photographer
             </p>
         </section>
 
@@ -330,6 +331,14 @@
                     <div class="item-overlay">
                         <span class="text-[#2dd4bf] text-[10px] font-black tracking-widest uppercase mb-1">Studio & Fine Art</span>
                         <h3 class="text-xl font-black text-white uppercase">Portraits</h3>
+                    </div>
+                </div>
+
+                <div class="gallery-item card-7 reveal active" onclick="openGallery('product-modal')">
+                    <img src="./images/products/products (2).webp" alt="Product Shoots" class="w-full h-full object-cover">
+                    <div class="item-overlay">
+                        <span class="text-[#2dd4bf] text-[10px] font-black tracking-widest uppercase mb-1">Commercial & Brand</span>
+                        <h3 class="text-xl font-black text-white uppercase">Product Shoots</h3>
                     </div>
                 </div>
             </div>
@@ -390,7 +399,7 @@
                             After finishing college, I decided to stop treating photography as just a hobby and started taking it seriously as a career. Since then, I’ve been out there every day, working hard to find that one great opportunity to show what I can really do. Whether I’m freezing a split-second goal on the field or capturing the raw intensity of an event, I love the pressure of knowing you only have one shot to get it right.
                         </p>
                         <p>
-                            Right now, I specialize in <span class="text-white">Sports, Events, Wildlife, and Portraits</span> photography. I don’t just take pictures; I look for those "perfect moments" that tell a story. From mastering fast shutter speeds on the field to the final touches in Lightroom and CapCut, I’m dedicated to making people feel the speed and emotion of the action. I’m looking for the right team, club, or media house where I can bring that hustle and help create something great.
+                            Right now, I specialize in <span class="text-white">Sports, Events, Wildlife, Portraits, and Product Photography</span>. I don’t just take pictures; I look for those "perfect moments" that tell a story. From mastering fast shutter speeds on the field to the final touches in Lightroom and CapCut, I’m dedicated to making people feel the speed and emotion of the action. I’m looking for the right team, club, or media house where I can bring that hustle and help create something great.
                         </p>
                     </div>
                 </div>
@@ -636,6 +645,19 @@
             <img src="./images/portraits/portraits (1).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
             <img src="./images/portraits/portraits (6).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
             <img src="./images/portraits/portraits (3).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+        </div>
+    </div>
+
+    <!-- PRODUCT SHOOTS SUB-GALLERY OVERLAY MODAL -->
+    <div id="product-modal" class="gallery-modal">
+        <span class="close-modal" onclick="closeGallery('product-modal')">&times;</span>
+        <div class="modal-content-wrapper three-col-wrapper">
+            <img src="./images/products/products (4).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/products/products (6).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/products/products (5).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/products/products (2).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/products/products (3).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
+            <img src="./images/products/products (1).webp" loading="lazy" class="modal-img" onclick="focusImage(this)">
         </div>
     </div>
 
